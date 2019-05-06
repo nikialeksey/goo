@@ -44,41 +44,6 @@ ext {
     allLicenses = ['MIT']
 }
 if (project.rootProject.file('local.properties').exists()) {
-    apply plugin: 'maven'
-    group = publishedGroupId
-    install {
-        repositories.mavenInstaller {
-            pom.project {
-                packaging 'jar'
-                groupId publishedGroupId
-                artifactId artifact
-
-                name libraryName
-                description libraryDescription
-                url siteUrl
-
-                licenses {
-                    license {
-                        name licenseName
-                        url licenseUrl
-                    }
-                }
-                developers {
-                    developer {
-                        id developerId
-                        name developerName
-                        email developerEmail
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-                }
-            }
-        }
-    }
-
     apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
     apply plugin: 'maven-publish'
     publishing {
@@ -90,7 +55,7 @@ if (project.rootProject.file('local.properties').exists()) {
 
                 groupId publishedGroupId
                 artifactId artifact
-                version libraryVersion
+                version = libraryVersion
 
                 pom {
                     name = libraryName
