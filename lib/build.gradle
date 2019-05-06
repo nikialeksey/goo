@@ -1,0 +1,133 @@
+plugins {
+    id 'java-library'
+    id 'jacoco'
+    id 'com.jfrog.bintray' version '1.8.4'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:5.2.0.201812061821-r'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = false
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+ext {
+    bintrayName = 'goo'
+    artifact = 'goo'
+    libraryName = 'goo'
+
+    libraryDescription = 'Object oriented jgit wrapper'
+
+    bintrayRepo = 'java'
+    publishedGroupId = 'com.nikialeksey'
+
+    siteUrl = 'https://github.com/nikialeksey/goo'
+    gitUrl = 'https://github.com/nikialeksey/goo.git'
+
+    libraryVersion = version
+
+    developerId = 'nikialeksey'
+    developerName = 'Alexey Nikitin'
+    developerEmail = 'nikialeksey@gmail.com'
+    licenseName = 'MIT License'
+    licenseUrl = 'https://github.com/nikialeksey/goo/blob/master/LICENSE'
+    allLicenses = ['MIT']
+}
+if (project.rootProject.file('local.properties').exists()) {
+    apply plugin: 'maven'
+    group = publishedGroupId
+    install {
+        repositories.mavenInstaller {
+            pom.project {
+                packaging 'jar'
+                groupId publishedGroupId
+                artifactId artifact
+
+                name libraryName
+                description libraryDescription
+                url siteUrl
+
+                licenses {
+                    license {
+                        name licenseName
+                        url licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+
+    apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+    apply plugin: 'maven-publish'
+    publishing {
+        publications {
+            goo_lib(MavenPublication) {
+                artifact(javadocJar)
+                artifact(sourcesJar)
+                artifact("$buildDir/libs/lib-${libraryVersion}.jar")
+
+                groupId publishedGroupId
+                artifactId artifact
+                version libraryVersion
+
+                pom {
+                    name = libraryName
+                    description = libraryDescription
+
+                    url = siteUrl
+
+                    licenses {
+                        license {
+                            name = licenseName
+                            url = licenseUrl
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = developerId
+                            name = developerName
+                            email = developerEmail
+                        }
+                    }
+                    scm {
+                        connection = gitUrl
+                        developerConnection = gitUrl
+                        url = siteUrl
+                    }
+                }
+
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', 'org.eclipse.jgit')
+                    dependencyNode.appendNode('artifactId', 'org.eclipse.jgit')
+                    dependencyNode.appendNode('version', '5.2.0.201812061821-r')
+                }
+            }
+        }
+    }
+    bintray.publications = ['goo_lib']
+    bintray.configurations = []
+}
