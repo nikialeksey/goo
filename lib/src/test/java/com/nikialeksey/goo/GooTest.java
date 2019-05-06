@@ -6,11 +6,11 @@ import org.junit.Test;
 
 import java.io.File;
 
-public class GitTest {
+public class GooTest {
     @Test
     public void currentRepoOriginUrl() throws Exception {
         Assert.assertThat(
-            new Git(new File("../.git")).origin().repo(),
+            new Goo(new File("../.git")).origin().repo(),
             IsEqual.equalTo("goo")
         );
     }

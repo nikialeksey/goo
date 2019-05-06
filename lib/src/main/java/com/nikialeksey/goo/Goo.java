@@ -9,11 +9,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Git {
+public class Goo {
 
-    private final Function0<Repository, NullfreeException> repo;
+    private final Function0<Repository, GooException> repo;
 
-    public Git(final File gitDir) {
+    public Goo(final File gitDir) {
         this(
             () -> {
                 try {
@@ -22,7 +22,7 @@ public class Git {
                         .setMustExist(true)
                         .build();
                 } catch (IOException e) {
-                    throw new NullfreeException(
+                    throw new GooException(
                         String.format(
                             "Can not build the git repo from git folder: %s",
                             gitDir.getAbsolutePath()
@@ -34,11 +34,11 @@ public class Git {
         );
     }
 
-    public Git(final Function0<Repository, NullfreeException> repo) {
+    public Goo(final Function0<Repository, GooException> repo) {
         this.repo = repo;
     }
 
-    public Origin origin() throws NullfreeException {
+    public Origin origin() throws GooException {
         try {
             return new Origin(
                 new URL(
@@ -48,7 +48,7 @@ public class Git {
                 )
             );
         } catch (MalformedURLException e) {
-            throw new NullfreeException("Can not form the origin url.", e);
+            throw new GooException("Can not form the origin url.", e);
         }
     }
 }
