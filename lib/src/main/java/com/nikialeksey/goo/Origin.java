@@ -1,12 +1,12 @@
 package com.nikialeksey.goo;
 
-import java.net.URL;
+import org.eclipse.jgit.transport.URIish;
 
 public class Origin {
 
-    private final URL url;
+    private final URIish url;
 
-    public Origin(final URL url) {
+    public Origin(final URIish url) {
         this.url = url;
     }
 
