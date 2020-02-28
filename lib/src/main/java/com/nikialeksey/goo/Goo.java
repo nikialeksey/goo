@@ -3,10 +3,12 @@ package com.nikialeksey.goo;
 import com.nikialeksey.functions.Function0;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.URIish;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class Goo {
@@ -41,13 +43,13 @@ public class Goo {
     public Origin origin() throws GooException {
         try {
             return new Origin(
-                new URL(
+                new URIish(
                     repo.execute()
                         .getConfig()
                         .getString("remote", "origin", "url")
                 )
             );
-        } catch (MalformedURLException e) {
+        } catch (URISyntaxException e) {
             throw new GooException("Can not form the origin url.", e);
         }
     }
